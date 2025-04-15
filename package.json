@@ -1,0 +1,16 @@
+{
+  "name": "usda-data-visualization",
+  "version": "1.0.0",
+  "description": "USDA data visualization for produce pricing history",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -c-1"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
