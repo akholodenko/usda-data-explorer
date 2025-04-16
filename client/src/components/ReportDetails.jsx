@@ -122,12 +122,72 @@ export default function ReportDetails({
                   onClick={() => setSelectedRow(row)}
                 >
                   <td>{row.grp || "-"}</td>
-                  <td>{row.commodity || "-"}</td>
-                  <td>{row.var || "-"}</td>
+                  <td>
+                    <span
+                      style={{
+                        fontWeight:
+                          selectedRow &&
+                          row.commodity === selectedRow.commodity &&
+                          row.var === selectedRow.var &&
+                          row.item_size === selectedRow.item_size &&
+                          row.organic === selectedRow.organic
+                            ? "bold"
+                            : "normal",
+                      }}
+                    >
+                      {row.commodity || "-"}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      style={{
+                        fontWeight:
+                          selectedRow &&
+                          row.commodity === selectedRow.commodity &&
+                          row.var === selectedRow.var &&
+                          row.item_size === selectedRow.item_size &&
+                          row.organic === selectedRow.organic
+                            ? "bold"
+                            : "normal",
+                      }}
+                    >
+                      {row.var || "-"}
+                    </span>
+                  </td>
                   <td>{row.high_price || "-"}</td>
                   <td>{row.low_price || "-"}</td>
-                  <td>{row.item_size || "-"}</td>
-                  <td>{row.organic || "-"}</td>
+                  <td>
+                    <span
+                      style={{
+                        fontWeight:
+                          selectedRow &&
+                          row.commodity === selectedRow.commodity &&
+                          row.var === selectedRow.var &&
+                          row.item_size === selectedRow.item_size &&
+                          row.organic === selectedRow.organic
+                            ? "bold"
+                            : "normal",
+                      }}
+                    >
+                      {row.item_size || "-"}
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      style={{
+                        fontWeight:
+                          selectedRow &&
+                          row.commodity === selectedRow.commodity &&
+                          row.var === selectedRow.var &&
+                          row.item_size === selectedRow.item_size &&
+                          row.organic === selectedRow.organic
+                            ? "bold"
+                            : "normal",
+                      }}
+                    >
+                      {row.organic || "-"}
+                    </span>
+                  </td>
                   <td>{row.pkg || "-"}</td>
                   <td>{row.report_date || "-"}</td>
                   <td>{row.season || "-"}</td>
