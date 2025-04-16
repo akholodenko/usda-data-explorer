@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { fetchReports, fetchReportData, fetchCommodities } from "./api";
+import {
+  fetchAvailableReports,
+  fetchReportData,
+  fetchCommodities,
+} from "./services/api";
 import ReportsList from "./components/ReportsList";
 import SearchBar from "./components/SearchBar";
 import CommodityFilter from "./components/CommodityFilter";
 import ReportDetails from "./components/ReportDetails";
 import ErrorMessage from "./components/ErrorMessage";
+import "./styles/App.css";
 
 export default function App() {
   const [reports, setReports] = useState([]);
@@ -14,25 +19,32 @@ export default function App() {
   const [reportData, setReportData] = useState(null);
   const [commodityFilter, setCommodityFilter] = useState("");
   const [error, setError] = useState("");
+  const [lastDays, setLastDays] = useState(90); // Default to 90 days
+  const [isLoading, setIsLoading] = useState(false);
 
   // Load reports and commodities on mount
   useEffect(() => {
-    fetchReports()
-      .then((data) => {
+    setIsLoading(true);
+    Promise.all([fetchAvailableReports(), fetchCommodities()])
+      .then(([reportsData, commoditiesData]) => {
         // Filter for Shipping Point reports
-        const shippingReports = data.filter((report) =>
+        const shippingReports = reportsData.filter((report) =>
           report.market_types?.some((type) =>
             type.toLowerCase().includes("shipping point")
           )
         );
         setReports(shippingReports);
         setFilteredReports(shippingReports);
+        setCommodities(commoditiesData);
+        setError("");
       })
-      .catch(() => setError("Failed to load reports"));
-
-    fetchCommodities()
-      .then(setCommodities)
-      .catch(() => setError("Failed to load commodities"));
+      .catch((err) => {
+        setError("Failed to load initial data");
+        console.error("Error loading initial data:", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   // Filter reports by search
@@ -53,9 +65,20 @@ export default function App() {
     setSelectedReport(report);
     setReportData(null);
     setCommodityFilter("");
+    setLastDays(90); // Reset to default when selecting a new report
+    setIsLoading(true);
     fetchReportData(report.slug_id)
-      .then(setReportData)
-      .catch(() => setError("Failed to load report data"));
+      .then((data) => {
+        setReportData(data);
+        setError("");
+      })
+      .catch((err) => {
+        setError("Failed to load report data");
+        console.error("Error fetching report data:", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   // Filter report details by commodity
@@ -63,27 +86,54 @@ export default function App() {
     setCommodityFilter(commodityName);
   };
 
+  const handleLastDaysChange = (days) => {
+    setLastDays(days);
+    if (selectedReport) {
+      setIsLoading(true);
+      fetchReportData(selectedReport.slug_id, days)
+        .then((data) => {
+          setReportData(data);
+          setError("");
+        })
+        .catch((err) => {
+          setError("Failed to load report data");
+          console.error("Error fetching report data:", err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  };
+
   return (
-    <div className="container">
-      <h1>USDA Data Visualization (React)</h1>
-      <ErrorMessage message={error} />
-      <SearchBar onSearch={handleSearch} />
-      <div className="reports-list">
-        <h2>Shipping Point Reports</h2>
-        <ReportsList
-          reports={filteredReports}
-          onSelect={handleSelectReport}
-          selectedReport={selectedReport}
-        />
-      </div>
-      <div className="data-display">
-        <ReportDetails
-          report={selectedReport}
-          reportData={reportData}
-          commodities={commodities}
-          commodityFilter={commodityFilter}
-          onCommodityFilter={handleCommodityFilter}
-        />
+    <div className="app">
+      <header>
+        <h1>USDA Market Reports</h1>
+      </header>
+
+      <div className="app-content">
+        <aside className="sidebar">
+          <h2>Available Reports</h2>
+          <SearchBar onSearch={handleSearch} />
+          <ReportsList
+            reports={filteredReports}
+            onSelect={handleSelectReport}
+            selectedReport={selectedReport}
+          />
+        </aside>
+
+        <main className="main-content">
+          <ReportDetails
+            report={selectedReport}
+            reportData={reportData}
+            commodities={commodities}
+            commodityFilter={commodityFilter}
+            onCommodityFilter={handleCommodityFilter}
+            lastDays={lastDays}
+            onLastDaysChange={handleLastDaysChange}
+            isLoading={isLoading}
+          />
+        </main>
       </div>
     </div>
   );

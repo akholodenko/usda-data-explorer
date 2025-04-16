@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import CommodityFilter from "./CommodityFilter";
+import LastDaysFilter from "./LastDaysFilter";
 import Chart from "./Chart";
 // import Chart from './Chart'; // Uncomment if you want to use the Chart
+import "../styles/ReportDetails.css";
 
 export default function ReportDetails({
   report,
@@ -9,6 +11,9 @@ export default function ReportDetails({
   commodities,
   commodityFilter,
   onCommodityFilter,
+  lastDays = 90, // Default to 90 days
+  onLastDaysChange,
+  isLoading,
 }) {
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -16,8 +21,17 @@ export default function ReportDetails({
     return <div className="report-info">Select a report to view details.</div>;
   }
 
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading report data...</p>
+      </div>
+    );
+  }
+
   if (!reportData) {
-    return <div className="report-info">Loading report data...</div>;
+    return <div className="report-info">No report data available.</div>;
   }
 
   // The report details are in data[1].results
@@ -46,11 +60,17 @@ export default function ReportDetails({
         <h2 id="commodityName">
           {report?.report_title ? `${report.report_title}` : "Report Details"}
         </h2>
-        <CommodityFilter
-          commodities={commodities}
-          value={commodityFilter}
-          onChange={onCommodityFilter}
-        />
+        <div className="filters">
+          <CommodityFilter
+            commodities={commodities}
+            value={commodityFilter}
+            onChange={onCommodityFilter}
+          />
+          <LastDaysFilter
+            lastDays={lastDays}
+            onLastDaysChange={onLastDaysChange}
+          />
+        </div>
       </div>
       {selectedRow && chartData && chartData.length > 0 && (
         <div className="chart-container">

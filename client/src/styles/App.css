@@ -1,0 +1,25 @@
+.filters {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.last-days-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.last-days-select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 0.9rem;
+}
+
+.last-days-select:focus {
+  outline: none;
+  border-color: #1976d2;
+}
