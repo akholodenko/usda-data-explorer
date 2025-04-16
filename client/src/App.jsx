@@ -107,22 +107,27 @@ export default function App() {
 
   return (
     <div className="app">
-      <header>
+      <header className="app-header">
         <h1>USDA Market Reports</h1>
       </header>
 
-      <div className="app-content">
+      <div className="app-container">
         <aside className="sidebar">
-          <h2>Available Reports</h2>
-          <SearchBar onSearch={handleSearch} />
-          <ReportsList
-            reports={filteredReports}
-            onSelect={handleSelectReport}
-            selectedReport={selectedReport}
-          />
+          <div className="sidebar-header">
+            <h2>Available Reports</h2>
+            <SearchBar onSearch={handleSearch} />
+          </div>
+          <div className="reports-list-container">
+            <ReportsList
+              reports={filteredReports}
+              onSelect={handleSelectReport}
+              selectedReport={selectedReport}
+            />
+          </div>
         </aside>
 
         <main className="main-content">
+          {error && <ErrorMessage message={error} />}
           <ReportDetails
             report={selectedReport}
             reportData={reportData}

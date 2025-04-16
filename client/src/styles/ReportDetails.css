@@ -31,3 +31,50 @@
   font-size: 1.1rem;
   margin: 0;
 }
+
+.rep-cmt-cell {
+  max-width: 100px;
+  position: relative;
+  cursor: default;
+}
+
+.rep-cmt-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rep-cmt-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  background-color: #333;
+  color: white;
+  text-align: left;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  white-space: normal;
+  width: max-content;
+  max-width: 300px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(100% + 10px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rep-cmt-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.rep-cmt-cell:hover .rep-cmt-tooltip {
+  display: block;
+}

@@ -131,10 +131,36 @@ export default function ReportDetails({
                   <td>{row.pkg || "-"}</td>
                   <td>{row.report_date || "-"}</td>
                   <td>{row.season || "-"}</td>
-                  <td>{row.market_tone_comments || "-"}</td>
+                  <td>
+                    <div className="rep-cmt-cell">
+                      {row.market_tone_comments ? (
+                        <>
+                          <span className="rep-cmt-text">
+                            {row.market_tone_comments}
+                          </span>
+                          <div className="rep-cmt-tooltip">
+                            {row.market_tone_comments}
+                          </div>
+                        </>
+                      ) : (
+                        "-"
+                      )}
+                    </div>
+                  </td>
                   <td>{row.demand_tone_comments || "-"}</td>
                   <td>{row.supply_tone_comments || "-"}</td>
-                  <td>{row.rep_cmt || "-"}</td>
+                  <td>
+                    <div className="rep-cmt-cell">
+                      {row.rep_cmt ? (
+                        <>
+                          <span className="rep-cmt-text">{row.rep_cmt}</span>
+                          <div className="rep-cmt-tooltip">{row.rep_cmt}</div>
+                        </>
+                      ) : (
+                        "-"
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
