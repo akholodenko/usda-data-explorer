@@ -7,7 +7,7 @@ export const fetchReports = () =>
 
 export const fetchReportData = (reportId) =>
   axios
-    .get(`${PROXY_URL}/reports/${reportId}?allSections=true&lastDays=365`)
+    .get(`${PROXY_URL}/reports/${reportId}?allSections=true&lastDays=180`)
     .then((res) => res.data);
 
 export const fetchCommodities = () =>

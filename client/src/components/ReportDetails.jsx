@@ -44,7 +44,7 @@ export default function ReportDetails({
     <div>
       <div className="report-header">
         <h2 id="commodityName">
-          {reportData[0]?.report_title || "Report Details"}
+          {report?.report_title ? `${report.report_title}` : "Report Details"}
         </h2>
         <CommodityFilter
           commodities={commodities}

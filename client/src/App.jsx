@@ -70,7 +70,11 @@ export default function App() {
       <SearchBar onSearch={handleSearch} />
       <div className="reports-list">
         <h2>Shipping Point Reports</h2>
-        <ReportsList reports={filteredReports} onSelect={handleSelectReport} />
+        <ReportsList
+          reports={filteredReports}
+          onSelect={handleSelectReport}
+          selectedReport={selectedReport}
+        />
       </div>
       <div className="data-display">
         <ReportDetails
