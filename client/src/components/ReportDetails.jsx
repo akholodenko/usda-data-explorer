@@ -78,6 +78,10 @@ export default function ReportDetails({
                 <th>Package</th>
                 <th>Report Date</th>
                 <th>Season</th>
+                <th>Market Tone</th>
+                <th>Demand Tone</th>
+                <th>Supply Tone</th>
+                <th>Rep Cmt</th>
               </tr>
             </thead>
             <tbody>
@@ -107,6 +111,10 @@ export default function ReportDetails({
                   <td>{row.pkg || "-"}</td>
                   <td>{row.report_date || "-"}</td>
                   <td>{row.season || "-"}</td>
+                  <td>{row.market_tone_comments || "-"}</td>
+                  <td>{row.demand_tone_comments || "-"}</td>
+                  <td>{row.supply_tone_comments || "-"}</td>
+                  <td>{row.rep_cmt || "-"}</td>
                 </tr>
               ))}
             </tbody>
