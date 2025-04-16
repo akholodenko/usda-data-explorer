@@ -60,17 +60,17 @@ export default function ReportDetails({
         <h2 id="commodityName">
           {report?.report_title ? `${report.report_title}` : "Report Details"}
         </h2>
-        <div className="filters">
-          <CommodityFilter
-            commodities={commodities}
-            value={commodityFilter}
-            onChange={onCommodityFilter}
-          />
-          <LastDaysFilter
-            lastDays={lastDays}
-            onLastDaysChange={onLastDaysChange}
-          />
-        </div>
+      </div>
+      <div className="filters">
+        <CommodityFilter
+          commodities={commodities}
+          value={commodityFilter}
+          onChange={onCommodityFilter}
+        />
+        <LastDaysFilter
+          lastDays={lastDays}
+          onLastDaysChange={onLastDaysChange}
+        />
       </div>
       {selectedRow && chartData && chartData.length > 0 && (
         <div className="chart-container">
