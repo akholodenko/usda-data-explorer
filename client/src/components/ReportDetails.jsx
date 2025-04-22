@@ -70,6 +70,13 @@ export default function ReportDetails({
         <LastDaysFilter
           lastDays={lastDays}
           onLastDaysChange={onLastDaysChange}
+          options={[
+            { value: 30, label: "Last 30 Days" },
+            { value: 60, label: "Last 60 Days" },
+            { value: 90, label: "Last 90 Days" },
+            { value: 180, label: "Last 180 Days" },
+            { value: 365, label: "Last 365 Days" },
+          ]}
         />
       </div>
       {selectedRow && chartData && chartData.length > 0 && (
