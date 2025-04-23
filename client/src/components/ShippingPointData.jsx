@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import LastDaysFilter from "./LastDaysFilter";
 import CommodityFilter from "./CommodityFilter";
@@ -12,13 +12,21 @@ const ShippingPointData = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [lastDays, setLastDays] = useState(7);
+  const [lastDays, setLastDays] = useState(30);
   const [selectedCommodity, setSelectedCommodity] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [allCommodities, setAllCommodities] = useState([]);
   const [selectedVarieties, setSelectedVarieties] = useState({});
+  const initialFetchDone = useRef(false);
+  const commoditiesFetchDone = useRef(false);
 
   const loadCommodities = async () => {
+    const currentValue = commoditiesFetchDone.current;
+    commoditiesFetchDone.current = true;
+
+    // Skip if this is a duplicate initial load
+    if (currentValue) return;
+
     try {
       const data = await fetchCommodities();
       setAllCommodities(data);
@@ -28,6 +36,12 @@ const ShippingPointData = () => {
   };
 
   const fetchData = async (days) => {
+    const currentValue = initialFetchDone.current;
+    initialFetchDone.current = true;
+
+    // Skip if this is a duplicate initial load
+    if (currentValue && days === 30) return;
+
     setLoading(true);
     setError("");
     try {
@@ -46,6 +60,9 @@ const ShippingPointData = () => {
 
   useEffect(() => {
     loadCommodities();
+  }, []);
+
+  useEffect(() => {
     fetchData(lastDays);
   }, [lastDays]);
 
