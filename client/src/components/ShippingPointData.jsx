@@ -8,6 +8,169 @@ import "../styles/ShippingPointData.css";
 
 const PROXY_URL = "http://localhost:3000/api";
 
+// Helper function moved outside components to be accessible to both
+const getUniqueVarieties = (rows) => {
+  return rows
+    .map((row) => row.variety)
+    .filter((v) => v && v !== "-" && v !== "N/A" && v.trim() !== "")
+    .filter((v, i, self) => self.indexOf(v) === i);
+};
+
+const CommoditySection = ({
+  commodity,
+  rows,
+  selectedRow,
+  onRowClick,
+  selectedVarieties,
+  handleVarietyClick,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div key={commodity} className="commodity-group">
+      <div
+        className="commodity-header"
+        onClick={() => setIsExpanded(!isExpanded)}
+        style={{ cursor: "pointer" }}
+      >
+        <div className="header-content">
+          <span className={`chevron ${isExpanded ? "expanded" : ""}`}>▶</span>
+          <div>
+            {commodity}
+            {rows[0]?.group && (
+              <span className="commodity-group-label">({rows[0].group})</span>
+            )}
+          </div>
+        </div>
+      </div>
+      {isExpanded && (
+        <>
+          <div className="variety-filter">
+            {getUniqueVarieties(rows).map((variety) => (
+              <button
+                key={variety}
+                className={`variety-button ${
+                  selectedVarieties[commodity] === variety ? "active" : ""
+                }`}
+                onClick={() => handleVarietyClick(commodity, variety)}
+              >
+                {variety}
+              </button>
+            ))}
+            {selectedVarieties[commodity] && (
+              <button
+                className="variety-button clear"
+                onClick={() => handleVarietyClick(commodity, null)}
+              >
+                Clear Filter
+              </button>
+            )}
+          </div>
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Variety</th>
+                <th>High Price</th>
+                <th>Low Price</th>
+                <th>Item Size</th>
+                <th>Package</th>
+                <th>Report Date</th>
+                <th>Quality</th>
+                <th>Organic</th>
+                <th>Market Tone</th>
+                <th>Demand Tone</th>
+                <th>Supply Tone</th>
+                <th>Commodity Comments</th>
+                <th>Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows
+                .filter(
+                  (row) =>
+                    !selectedVarieties[commodity] ||
+                    row.variety === selectedVarieties[commodity]
+                )
+                .map((row, idx) => (
+                  <tr
+                    key={idx}
+                    onClick={() => onRowClick(row)}
+                    style={{
+                      cursor: "pointer",
+                      background:
+                        selectedRow &&
+                        row.commodity === selectedRow.commodity &&
+                        row.variety === selectedRow.variety &&
+                        row.item_size === selectedRow.item_size &&
+                        row.organic === selectedRow.organic
+                          ? "#e3f2fd"
+                          : undefined,
+                    }}
+                  >
+                    <td>{row.variety || "-"}</td>
+                    <td>{row.high_price || "-"}</td>
+                    <td>{row.low_price || "-"}</td>
+                    <td>{row.item_size || "-"}</td>
+                    <td>{row.package || "-"}</td>
+                    <td>{row.report_date || "-"}</td>
+                    <td>{row.quality || "-"}</td>
+                    <td>{row.organic || "-"}</td>
+                    <td>
+                      <div className="rep-cmt-cell">
+                        {row.market_tone_comments ? (
+                          <>
+                            <span className="rep-cmt-text">
+                              {row.market_tone_comments}
+                            </span>
+                            <div className="rep-cmt-tooltip">
+                              {row.market_tone_comments}
+                            </div>
+                          </>
+                        ) : (
+                          "-"
+                        )}
+                      </div>
+                    </td>
+                    <td>{row.demand_tone_comments || "-"}</td>
+                    <td>{row.supply_tone_comments || "-"}</td>
+                    <td>
+                      <div className="rep-cmt-cell">
+                        {row.commodity_comments ? (
+                          <>
+                            <span className="rep-cmt-text">
+                              {row.commodity_comments}
+                            </span>
+                            <div className="rep-cmt-tooltip">
+                              {row.commodity_comments}
+                            </div>
+                          </>
+                        ) : (
+                          "-"
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <div className="rep-cmt-cell">
+                        {row.comment ? (
+                          <>
+                            <span className="rep-cmt-text">{row.comment}</span>
+                            <div className="rep-cmt-tooltip">{row.comment}</div>
+                          </>
+                        ) : (
+                          "-"
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </>
+      )}
+    </div>
+  );
+};
+
 const ShippingPointData = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -86,13 +249,6 @@ const ShippingPointData = () => {
     }));
   };
 
-  const getUniqueVarieties = (rows) => {
-    return rows
-      .map((row) => row.variety)
-      .filter((v) => v && v !== "-" && v !== "N/A" && v.trim() !== "")
-      .filter((v, i, self) => self.indexOf(v) === i);
-  };
-
   const groupByCommodity = (data) => {
     if (!data?.results) return {};
     return data.results.reduce((acc, row) => {
@@ -108,12 +264,13 @@ const ShippingPointData = () => {
   const getChartData = () => {
     if (!selectedRow || !data?.results) return null;
 
-    // Filter all results for the same commodity/variety/item_size
+    // Filter all results for the same commodity/variety/item_size/organic
     const chartData = data.results.filter(
       (r) =>
         r.commodity === selectedRow.commodity &&
         r.variety === selectedRow.variety &&
-        r.item_size === selectedRow.item_size
+        r.item_size === selectedRow.item_size &&
+        r.organic === selectedRow.organic
     );
 
     // Sort by report_date ascending
@@ -199,124 +356,15 @@ const ShippingPointData = () => {
                 !selectedCommodity || commodity === selectedCommodity
             )
             .map(([commodity, rows]) => (
-              <div key={commodity} className="commodity-group">
-                <h3 className="commodity-header">
-                  {commodity}
-                  {getCommodityGroup(rows) && (
-                    <span className="commodity-group-label">
-                      ({getCommodityGroup(rows)})
-                    </span>
-                  )}
-                </h3>
-                <div className="variety-filter">
-                  {getUniqueVarieties(rows).length > 0 ? (
-                    <>
-                      {getUniqueVarieties(rows).map((variety) => (
-                        <button
-                          key={variety}
-                          className={`variety-button ${
-                            selectedVarieties[commodity] === variety
-                              ? "active"
-                              : ""
-                          }`}
-                          onClick={() => handleVarietyClick(commodity, variety)}
-                        >
-                          {variety}
-                        </button>
-                      ))}
-                      {selectedVarieties[commodity] && (
-                        <button
-                          className="variety-button clear"
-                          onClick={() => handleVarietyClick(commodity, null)}
-                        >
-                          Clear Filter
-                        </button>
-                      )}
-                    </>
-                  ) : null}
-                </div>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Variety</th>
-                      <th>High Price</th>
-                      <th>Low Price</th>
-                      <th>Item Size</th>
-                      <th>Package</th>
-                      <th>Report Date</th>
-                      <th>Market Tone</th>
-                      <th>Demand Tone</th>
-                      <th>Supply Tone</th>
-                      <th>Rep Comments</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows
-                      .filter(
-                        (row) =>
-                          !selectedVarieties[commodity] ||
-                          row.variety === selectedVarieties[commodity]
-                      )
-                      .map((row, idx) => (
-                        <tr
-                          key={idx}
-                          onClick={() => handleRowClick(row)}
-                          style={{
-                            cursor: "pointer",
-                            background:
-                              selectedRow &&
-                              row.commodity === selectedRow.commodity &&
-                              row.variety === selectedRow.variety &&
-                              row.item_size === selectedRow.item_size
-                                ? "#e3f2fd"
-                                : undefined,
-                          }}
-                        >
-                          <td>{row.variety || "-"}</td>
-                          <td>{row.high_price || "-"}</td>
-                          <td>{row.low_price || "-"}</td>
-                          <td>{row.item_size || "-"}</td>
-                          <td>{row.pkg || "-"}</td>
-                          <td>{row.report_date || "-"}</td>
-                          <td>
-                            <div className="rep-cmt-cell">
-                              {row.market_tone_comments ? (
-                                <>
-                                  <span className="rep-cmt-text">
-                                    {row.market_tone_comments}
-                                  </span>
-                                  <div className="rep-cmt-tooltip">
-                                    {row.market_tone_comments}
-                                  </div>
-                                </>
-                              ) : (
-                                "-"
-                              )}
-                            </div>
-                          </td>
-                          <td>{row.demand_tone_comments || "-"}</td>
-                          <td>{row.supply_tone_comments || "-"}</td>
-                          <td>
-                            <div className="rep-cmt-cell">
-                              {row.rep_cmt ? (
-                                <>
-                                  <span className="rep-cmt-text">
-                                    {row.rep_cmt}
-                                  </span>
-                                  <div className="rep-cmt-tooltip">
-                                    {row.rep_cmt}
-                                  </div>
-                                </>
-                              ) : (
-                                "-"
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
+              <CommoditySection
+                key={commodity}
+                commodity={commodity}
+                rows={rows}
+                selectedRow={selectedRow}
+                onRowClick={handleRowClick}
+                selectedVarieties={selectedVarieties}
+                handleVarietyClick={handleVarietyClick}
+              />
             ))}
         </div>
       )}

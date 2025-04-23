@@ -6,7 +6,7 @@ import "./styles/App.css";
 
 export default function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="app">
         <header className="app-header">
           <h1>USDA Market Reports</h1>
