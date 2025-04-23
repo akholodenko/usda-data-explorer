@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 import LastDaysFilter from "./LastDaysFilter";
 import CommodityFilter from "./CommodityFilter";
 import Chart from "./Chart";
-import { fetchCommodities } from "../services/api";
+import { fetchCommodities, fetchShippingPointData } from "../services/api";
 import "../styles/ShippingPointData.css";
-
-const PROXY_URL = "http://localhost:3000/api";
 
 // Helper function moved outside components to be accessible to both
 const getUniqueVarieties = (rows) => {
@@ -36,7 +33,7 @@ const CommoditySection = ({
         <div className="header-content">
           <span className={`chevron ${isExpanded ? "expanded" : ""}`}>▶</span>
           <div>
-            {commodity}
+            {commodity}&nbsp;
             {rows[0]?.group && (
               <span className="commodity-group-label">({rows[0].group})</span>
             )}
@@ -187,7 +184,6 @@ const ShippingPointData = () => {
     const currentValue = commoditiesFetchDone.current;
     commoditiesFetchDone.current = true;
 
-    // Skip if this is a duplicate initial load
     if (currentValue) return;
 
     try {
@@ -208,10 +204,8 @@ const ShippingPointData = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await axios.get(
-        `${PROXY_URL}/reports/shipping-point?lastDays=${days}`
-      );
-      setData(response.data);
+      const data = await fetchShippingPointData(days);
+      setData(data);
       setSelectedRow(null); // Reset selected row when new data is fetched
     } catch (err) {
       setError("Failed to load shipping point data");

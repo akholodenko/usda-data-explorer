@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const PROXY_URL = "http://localhost:3000/api";
+const API_URL = "http://localhost:3000/api";
 
 export const fetchAvailableReports = async () => {
-  const response = await axios.get(`${PROXY_URL}/reports`);
+  const response = await axios.get(`${API_URL}/reports`);
   return response.data;
 };
 
 export const fetchReportData = async (reportId, lastDays = 90) => {
-  const response = await axios.get(`${PROXY_URL}/reports/${reportId}`, {
+  const response = await axios.get(`${API_URL}/reports/${reportId}`, {
     params: {
       allSections: true,
       lastDays,
@@ -18,6 +18,13 @@ export const fetchReportData = async (reportId, lastDays = 90) => {
 };
 
 export const fetchCommodities = async () => {
-  const response = await axios.get(`${PROXY_URL}/commodities`);
+  const response = await axios.get(`${API_URL}/commodities`);
+  return response.data;
+};
+
+export const fetchShippingPointData = async (lastDays = 30) => {
+  const response = await axios.get(`${API_URL}/reports/shipping-point`, {
+    params: { lastDays },
+  });
   return response.data;
 };
