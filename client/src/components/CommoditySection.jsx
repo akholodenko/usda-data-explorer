@@ -62,6 +62,7 @@ const CommoditySection = ({
             <thead>
               <tr>
                 <th>Variety</th>
+                <th>Location</th>
                 <th>High Price</th>
                 <th>Low Price</th>
                 <th>Item Size</th>
@@ -100,6 +101,7 @@ const CommoditySection = ({
                     }}
                   >
                     <td>{row.variety || "-"}</td>
+                    <td>{row.location || "-"}</td>
                     <td>{row.high_price || "-"}</td>
                     <td>{row.low_price || "-"}</td>
                     <td>{row.item_size || "-"}</td>
