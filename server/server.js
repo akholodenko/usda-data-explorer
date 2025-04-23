@@ -59,10 +59,11 @@ app.get("/api/reports", async (req, res) => {
 app.get("/api/reports/shipping-point", async (req, res) => {
   console.log("Received shipping point request with query:", req.query);
   try {
-    const { lastDays } = req.query;
+    const { lastDays, frequency = "weekly" } = req.query;
     console.log("lastDays parameter:", lastDays);
+    console.log("frequency parameter:", frequency);
 
-    const url = constructUrl("marketTypes/sc-cr/sc/shippingpt/daily", {
+    const url = constructUrl(`marketTypes/sc-cr/sc/shippingpt/${frequency}`, {
       q: "",
       LastDays: lastDays || 30,
     });

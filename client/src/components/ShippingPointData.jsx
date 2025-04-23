@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import LastDaysFilter from "./LastDaysFilter";
 import CommodityFilter from "./CommodityFilter";
+import FrequencyFilter from "./FrequencyFilter";
 import Chart from "./Chart";
 import CommoditySection from "./CommoditySection";
 import { fetchCommodities, fetchShippingPointData } from "../services/api";
@@ -19,6 +20,7 @@ const ShippingPointData = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [lastDays, setLastDays] = useState(30);
+  const [frequency, setFrequency] = useState("weekly");
   const [selectedCommodity, setSelectedCommodity] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [allCommodities, setAllCommodities] = useState([]);
@@ -44,13 +46,10 @@ const ShippingPointData = () => {
     const currentValue = initialFetchDone.current;
     initialFetchDone.current = true;
 
-    // Skip if this is a duplicate initial load
-    if (currentValue && days === 30) return;
-
     setLoading(true);
     setError("");
     try {
-      const data = await fetchShippingPointData(days);
+      const data = await fetchShippingPointData(days, frequency);
       setData(data);
       setSelectedRow(null); // Reset selected row when new data is fetched
     } catch (err) {
@@ -66,11 +65,16 @@ const ShippingPointData = () => {
   }, []);
 
   useEffect(() => {
+    initialFetchDone.current = false; // Reset the flag when dependencies change
     fetchData(lastDays);
-  }, [lastDays]);
+  }, [lastDays, frequency]);
 
   const handleLastDaysChange = (days) => {
     setLastDays(days);
+  };
+
+  const handleFrequencyChange = (newFrequency) => {
+    setFrequency(newFrequency);
   };
 
   const handleCommodityChange = (commodity) => {
@@ -167,7 +171,14 @@ const ShippingPointData = () => {
               { value: 14, label: "Last 14 Days" },
               { value: 21, label: "Last 21 Days" },
               { value: 30, label: "Last 30 Days" },
+              { value: 90, label: "Last 90 Days" },
+              { value: 180, label: "Last 180 Days" },
+              { value: 365, label: "Last Year" },
             ]}
+          />
+          <FrequencyFilter
+            frequency={frequency}
+            onFrequencyChange={handleFrequencyChange}
           />
           <CommodityFilter
             commodities={availableCommodities}

@@ -22,9 +22,15 @@ export const fetchCommodities = async () => {
   return response.data;
 };
 
-export const fetchShippingPointData = async (lastDays = 30) => {
+export const fetchShippingPointData = async (
+  lastDays = 30,
+  frequency = "weekly"
+) => {
   const response = await axios.get(`${API_URL}/reports/shipping-point`, {
-    params: { lastDays },
+    params: {
+      lastDays,
+      frequency,
+    },
   });
   return response.data;
 };

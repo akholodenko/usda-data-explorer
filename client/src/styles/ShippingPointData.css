@@ -206,6 +206,31 @@
   border-color: #3498db;
 }
 
+.frequency-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.frequency-filter label {
+  font-weight: 500;
+  color: #333;
+}
+
+.frequency-filter select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  min-width: 120px;
+  font-size: 0.9rem;
+}
+
+.frequency-filter select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
 .chart-container {
   margin: 1rem 0;
   padding: 1rem;
