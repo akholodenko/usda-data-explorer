@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LastDaysFilter from "./LastDaysFilter";
+import CommodityFilter from "./CommodityFilter";
 import Chart from "./Chart";
+import { fetchCommodities } from "../services/api";
 import "../styles/ShippingPointData.css";
 
 const PROXY_URL = "http://localhost:3000/api";
@@ -13,6 +15,16 @@ const ShippingPointData = () => {
   const [lastDays, setLastDays] = useState(7);
   const [selectedCommodity, setSelectedCommodity] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
+  const [allCommodities, setAllCommodities] = useState([]);
+
+  const loadCommodities = async () => {
+    try {
+      const data = await fetchCommodities();
+      setAllCommodities(data);
+    } catch (err) {
+      console.error("Error fetching commodities:", err);
+    }
+  };
 
   const fetchData = async (days) => {
     setLoading(true);
@@ -32,6 +44,7 @@ const ShippingPointData = () => {
   };
 
   useEffect(() => {
+    loadCommodities();
     fetchData(lastDays);
   }, [lastDays]);
 
@@ -60,14 +73,6 @@ const ShippingPointData = () => {
     }, {});
   };
 
-  const getUniqueCommodities = (data) => {
-    if (!data?.results) return [];
-    const commodities = new Set(
-      data.results.map((row) => row.commodity || "Unknown")
-    );
-    return Array.from(commodities).sort();
-  };
-
   const getChartData = () => {
     if (!selectedRow || !data?.results) return null;
 
@@ -85,6 +90,17 @@ const ShippingPointData = () => {
     );
   };
 
+  // Get unique commodities from the shipping point data
+  const getAvailableCommodities = () => {
+    if (!data?.results) return [];
+    const availableCommodities = new Set(
+      data.results.map((row) => row.commodity)
+    );
+    return allCommodities.filter((commodity) =>
+      availableCommodities.has(commodity.commodity_name)
+    );
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -99,8 +115,8 @@ const ShippingPointData = () => {
   }
 
   const groupedData = groupByCommodity(data);
-  const commodities = getUniqueCommodities(data);
   const chartData = getChartData();
+  const availableCommodities = getAvailableCommodities();
 
   return (
     <div className="shipping-point-container">
@@ -118,21 +134,11 @@ const ShippingPointData = () => {
               { value: 30, label: "Last 30 Days" },
             ]}
           />
-          <div className="commodity-filter">
-            <label htmlFor="commodityFilter">Filter by Commodity:</label>
-            <select
-              id="commodityFilter"
-              value={selectedCommodity}
-              onChange={(e) => handleCommodityChange(e.target.value)}
-            >
-              <option value="">All Commodities</option>
-              {commodities.map((commodity) => (
-                <option key={commodity} value={commodity}>
-                  {commodity}
-                </option>
-              ))}
-            </select>
-          </div>
+          <CommodityFilter
+            commodities={availableCommodities}
+            selectedCommodity={selectedCommodity}
+            onChange={handleCommodityChange}
+          />
         </div>
       </div>
 
