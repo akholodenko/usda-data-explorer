@@ -101,6 +101,12 @@ const ShippingPointData = () => {
     );
   };
 
+  // Get commodity group for a given commodity name
+  const getCommodityGroup = (rows) => {
+    // Get the first row's group (all rows in a group should have the same group)
+    return rows[0]?.group || "";
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -162,7 +168,14 @@ const ShippingPointData = () => {
             )
             .map(([commodity, rows]) => (
               <div key={commodity} className="commodity-group">
-                <h3 className="commodity-header">{commodity}</h3>
+                <h3 className="commodity-header">
+                  {commodity}
+                  {getCommodityGroup(rows) && (
+                    <span className="commodity-group-label">
+                      ({getCommodityGroup(rows)})
+                    </span>
+                  )}
+                </h3>
                 <table className="data-table">
                   <thead>
                     <tr>
