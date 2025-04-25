@@ -228,6 +228,29 @@ const ShippingPointData = () => {
                 })()}
               </span>
             </div>
+            <div className="stat-separator"></div>
+            <div className="stat-item">
+              <span className="stat-label">Latest High:</span>
+              <span className="stat-value">
+                {(() => {
+                  const latest = chartData[chartData.length - 1];
+                  return latest && !isNaN(parseFloat(latest.high_price))
+                    ? `$${parseFloat(latest.high_price).toFixed(2)}`
+                    : "N/A";
+                })()}
+              </span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Latest Low:</span>
+              <span className="stat-value">
+                {(() => {
+                  const latest = chartData[chartData.length - 1];
+                  return latest && !isNaN(parseFloat(latest.low_price))
+                    ? `$${parseFloat(latest.low_price).toFixed(2)}`
+                    : "N/A";
+                })()}
+              </span>
+            </div>
             <div className="stat-info">
               <small>Sizing: {selectedRow.item_size}</small>
               {selectedRow.variety && (

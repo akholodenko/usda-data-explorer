@@ -393,3 +393,10 @@
   display: block;
   margin-bottom: 0.25rem;
 }
+
+.stat-separator {
+  height: 1px;
+  background-color: #dee2e6;
+  margin: 0.75rem 0;
+  width: 100%;
+}
