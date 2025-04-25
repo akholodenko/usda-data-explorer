@@ -189,13 +189,64 @@ const ShippingPointData = () => {
       </div>
 
       {selectedRow && chartData && chartData.length > 0 && (
-        <div className="chart-container">
-          <h3>
-            {selectedRow.commodity}{" "}
-            {selectedRow.variety ? `- ${selectedRow.variety}` : ""} Price
-            History
-          </h3>
-          <Chart data={chartData} />
+        <div className="chart-section">
+          <div className="chart-container">
+            <h3>
+              {selectedRow.commodity}{" "}
+              {selectedRow.variety ? `- ${selectedRow.variety}` : ""} Price
+              History
+            </h3>
+            <Chart data={chartData} />
+          </div>
+          <div className="price-stats">
+            <h4>Price Statistics</h4>
+            <div className="stat-item">
+              <span className="stat-label">Highest Price:</span>
+              <span className="stat-value">
+                {(() => {
+                  const prices = chartData.map((d) => d.high_price);
+                  const validPrices = prices
+                    .map((price) => parseFloat(price))
+                    .filter((price) => !isNaN(price));
+                  return validPrices.length > 0
+                    ? `$${Math.max(...validPrices).toFixed(2)}`
+                    : "N/A";
+                })()}
+              </span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Lowest Price:</span>
+              <span className="stat-value">
+                {(() => {
+                  const prices = chartData.map((d) => d.low_price);
+                  const validPrices = prices
+                    .map((price) => parseFloat(price))
+                    .filter((price) => !isNaN(price));
+                  return validPrices.length > 0
+                    ? `$${Math.min(...validPrices).toFixed(2)}`
+                    : "N/A";
+                })()}
+              </span>
+            </div>
+            <div className="stat-info">
+              <small>Sizing: {selectedRow.item_size}</small>
+              {selectedRow.variety && (
+                <small>Variety: {selectedRow.variety}</small>
+              )}
+              <small>
+                Organic: {selectedRow.organic === "Y" ? "Yes" : "No"}
+              </small>
+              {selectedRow.package && (
+                <small>Package: {selectedRow.package}</small>
+              )}
+              {selectedRow.quality && (
+                <small>Quality: {selectedRow.quality}</small>
+              )}
+              {selectedRow.condition && (
+                <small>Condition: {selectedRow.condition}</small>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
