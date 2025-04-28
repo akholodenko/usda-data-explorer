@@ -318,16 +318,19 @@
 }
 
 .chart-container {
-  margin: 1rem 0;
-  padding: 1rem;
-  padding-bottom: 65px;
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  height: 400px;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .chart-container h3 {
@@ -484,57 +487,61 @@
 
 .price-stats {
   width: 400px;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 6px;
-  border: 1px solid #e9ecef;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .price-stats h4 {
-  margin: 0 0 1rem 0;
-  color: #343a40;
+  margin: 0 0 1.25rem 0;
+  color: #1f2937;
   font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .stat-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
-  padding: 0.5rem;
-  background: white;
-  border-radius: 4px;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.stat-item:hover {
+  background: #f3f4f6;
 }
 
 .stat-label {
-  color: #495057;
+  color: #4b5563;
   font-weight: 500;
-  white-space: nowrap;
-  margin-right: 1rem;
+  font-size: 0.95rem;
 }
 
 .stat-value {
-  color: #198754;
+  color: #111827;
   font-weight: 600;
-  text-align: right;
-  min-width: 120px;
-}
-
-.stat-info {
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #dee2e6;
-  color: #6c757d;
-}
-
-.stat-info small {
-  display: block;
-  margin-bottom: 0.25rem;
+  font-size: 1rem;
 }
 
 .stat-separator {
   height: 1px;
-  background-color: #dee2e6;
-  margin: 0.75rem 0;
-  width: 100%;
+  background-color: #e5e7eb;
+  margin: 1rem 0;
+}
+
+.stat-info {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.stat-info small {
+  display: block;
+  margin-bottom: 0.5rem;
 }

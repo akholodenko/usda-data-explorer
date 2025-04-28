@@ -81,25 +81,99 @@ export default function Chart({ data }) {
           {
             label: "High Price (smoothed)",
             data: highAvg,
-            borderColor: "rgb(75, 192, 192)",
-            backgroundColor: "rgba(75, 192, 192, 0.1)",
-            tension: 0.7,
+            borderColor: "#4f46e5", // Modern indigo
+            backgroundColor: "rgba(79, 70, 229, 0.1)",
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.4,
             spanGaps: true,
           },
           {
             label: "Low Price (smoothed)",
             data: lowAvg,
-            borderColor: "#ff9800",
-            backgroundColor: "rgba(255, 152, 0, 0.1)",
-            tension: 0.7,
+            borderColor: "#10b981", // Modern emerald
+            backgroundColor: "rgba(16, 185, 129, 0.1)",
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            tension: 0.4,
             spanGaps: true,
           },
         ],
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: "index",
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+            position: "top",
+            align: "start",
+            labels: {
+              usePointStyle: true,
+              pointStyle: "circle",
+              padding: 20,
+              font: {
+                size: 12,
+                family: "'Inter', sans-serif",
+              },
+            },
+          },
+          tooltip: {
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            padding: 12,
+            titleFont: {
+              size: 14,
+              family: "'Inter', sans-serif",
+            },
+            bodyFont: {
+              size: 13,
+              family: "'Inter', sans-serif",
+            },
+            cornerRadius: 8,
+            displayColors: true,
+            callbacks: {
+              label: function (context) {
+                return `${context.dataset.label}: $${context.parsed.y.toFixed(
+                  2
+                )}`;
+              },
+            },
+          },
+        },
         scales: {
-          y: { beginAtZero: false },
+          x: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              maxRotation: 45,
+              minRotation: 45,
+              font: {
+                size: 11,
+                family: "'Inter', sans-serif",
+              },
+            },
+          },
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: "rgba(0, 0, 0, 0.05)",
+            },
+            ticks: {
+              font: {
+                size: 11,
+                family: "'Inter', sans-serif",
+              },
+              callback: function (value) {
+                return "$" + value.toFixed(2);
+              },
+            },
+          },
         },
       },
     });
