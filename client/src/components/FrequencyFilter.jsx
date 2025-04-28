@@ -1,19 +1,20 @@
 import React from "react";
 
-const FrequencyFilter = ({ frequency, onFrequencyChange }) => {
+export default function FrequencyFilter({ frequency, onFrequencyChange }) {
   return (
     <div className="frequency-filter">
-      <label>Frequency:</label>
-      <select
-        value={frequency}
-        onChange={(e) => onFrequencyChange(e.target.value)}
-        className="filter-select"
-      >
-        <option value="weekly">Weekly</option>
-        <option value="daily">Daily</option>
-      </select>
+      <label htmlFor="frequencyFilter">Frequency:</label>
+      <div className="frequency-select">
+        <select
+          id="frequencyFilter"
+          value={frequency}
+          onChange={(e) => onFrequencyChange(e.target.value)}
+        >
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
     </div>
   );
-};
-
-export default FrequencyFilter;
+}

@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles/LastDaysFilter.css";
 
 const LastDaysFilter = ({
   lastDays,
@@ -14,8 +13,9 @@ const LastDaysFilter = ({
 }) => {
   return (
     <div className="last-days-filter">
+      <label htmlFor="lastDaysFilter">Duration:</label>
       <select
-        className="last-days-select"
+        id="lastDaysFilter"
         value={lastDays}
         onChange={(e) => onLastDaysChange(Number(e.target.value))}
       >

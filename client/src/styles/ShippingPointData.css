@@ -178,43 +178,90 @@
 .filters {
   display: flex;
   gap: 1rem;
-  align-items: center;
+  align-items: flex-start;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 1rem;
 }
 
-.commodity-filter {
+.commodity-filter,
+.frequency-filter,
+.last-days-filter {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
+  position: relative;
+  min-width: 250px;
 }
 
-.commodity-filter label {
-  font-weight: 500;
+.commodity-filter label[for="commodityFilter"],
+.frequency-filter label,
+.last-days-filter label {
+  font-weight: 700;
   color: #333;
+  text-align: left;
+  width: 100%;
 }
 
-.commodity-filter select {
+.typeahead-container,
+.frequency-select {
+  position: relative;
+  width: 100%;
+}
+
+.typeahead-input,
+.frequency-select select,
+.last-days-filter select {
+  width: 100%;
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background-color: white;
-  min-width: 200px;
   font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+  background-color: white;
 }
 
-.commodity-filter select:focus {
+.typeahead-input:focus,
+.frequency-select select:focus,
+.last-days-filter select:focus {
   outline: none;
   border-color: #3498db;
+}
+
+.typeahead-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.typeahead-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.typeahead-item:hover,
+.typeahead-item.highlighted {
+  background-color: #f0f0f0;
 }
 
 .frequency-filter {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.frequency-filter label {
-  font-weight: 500;
-  color: #333;
 }
 
 .frequency-filter select {
