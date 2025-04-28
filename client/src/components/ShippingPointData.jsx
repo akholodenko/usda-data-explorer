@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import LastDaysFilter from "./LastDaysFilter";
 import CommodityFilter from "./CommodityFilter";
 import FrequencyFilter from "./FrequencyFilter";
+import GroupFilter from "./GroupFilter";
 import Chart from "./Chart";
 import CommoditySection from "./CommoditySection";
 import { fetchCommodities, fetchShippingPointData } from "../services/api";
@@ -22,6 +23,7 @@ const ShippingPointData = () => {
   const [lastDays, setLastDays] = useState(30);
   const [frequency, setFrequency] = useState("weekly");
   const [selectedCommodity, setSelectedCommodity] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const [allCommodities, setAllCommodities] = useState([]);
   const [selectedVarieties, setSelectedVarieties] = useState({});
@@ -97,6 +99,11 @@ const ShippingPointData = () => {
   const groupByCommodity = (data) => {
     if (!data?.results) return {};
     return data.results.reduce((acc, row) => {
+      // Skip rows that don't match the selected group
+      if (selectedGroup && row.group !== selectedGroup) {
+        return acc;
+      }
+
       const commodity = row.commodity || "Unknown";
       if (!acc[commodity]) {
         acc[commodity] = [];
@@ -124,21 +131,28 @@ const ShippingPointData = () => {
     );
   };
 
-  // Get unique commodities from the shipping point data
-  const getAvailableCommodities = () => {
+  const getAvailableGroups = () => {
     if (!data?.results) return [];
-    const availableCommodities = new Set(
-      data.results.map((row) => row.commodity)
-    );
+    const groups = new Set();
+    data.results.forEach((row) => {
+      if (row.group) {
+        groups.add(row.group);
+      }
+    });
+    return Array.from(groups).sort();
+  };
+
+  const getFilteredCommodities = () => {
+    if (!data?.results) return [];
+    const availableCommodities = new Set();
+    data.results.forEach((row) => {
+      if (!selectedGroup || row.group === selectedGroup) {
+        availableCommodities.add(row.commodity);
+      }
+    });
     return allCommodities.filter((commodity) =>
       availableCommodities.has(commodity.commodity_name)
     );
-  };
-
-  // Get commodity group for a given commodity name
-  const getCommodityGroup = (rows) => {
-    // Get the first row's group (all rows in a group should have the same group)
-    return rows[0]?.group || "";
   };
 
   if (loading) {
@@ -156,7 +170,7 @@ const ShippingPointData = () => {
 
   const groupedData = groupByCommodity(data);
   const chartData = getChartData();
-  const availableCommodities = getAvailableCommodities();
+  const availableCommodities = getFilteredCommodities();
 
   return (
     <div className="shipping-point-container">
@@ -181,8 +195,13 @@ const ShippingPointData = () => {
             frequency={frequency}
             onFrequencyChange={handleFrequencyChange}
           />
+          <GroupFilter
+            groups={getAvailableGroups()}
+            selectedGroup={selectedGroup}
+            onGroupChange={setSelectedGroup}
+          />
           <CommodityFilter
-            commodities={availableCommodities}
+            commodities={getFilteredCommodities()}
             selectedCommodity={selectedCommodity}
             onChange={handleCommodityChange}
           />
