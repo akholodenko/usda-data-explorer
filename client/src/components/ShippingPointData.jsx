@@ -254,7 +254,12 @@ const ShippingPointData = () => {
                         ? `$${Math.min(...validLowPrices).toFixed(2)}`
                         : "N/A";
 
-                    return `${highest} / ${lowest}`;
+                    return (
+                      <>
+                        <span className="high-price">{highest}</span> /{" "}
+                        <span className="low-price">{lowest}</span>
+                      </>
+                    );
                   })()}
                 </span>
               </div>
@@ -281,7 +286,12 @@ const ShippingPointData = () => {
                         ? `$${Math.min(...validLowPrices).toFixed(2)}`
                         : "N/A";
 
-                    return `${highest} / ${lowest}`;
+                    return (
+                      <>
+                        <span className="high-price">{highest}</span> /{" "}
+                        <span className="low-price">{lowest}</span>
+                      </>
+                    );
                   })()}
                 </span>
               </div>
@@ -299,7 +309,12 @@ const ShippingPointData = () => {
                       latest && !isNaN(parseFloat(latest.low_price))
                         ? `$${parseFloat(latest.low_price).toFixed(2)}`
                         : "N/A";
-                    return `${latestHigh} / ${latestLow}`;
+                    return (
+                      <>
+                        <span className="high-price">{latestHigh}</span> /{" "}
+                        <span className="low-price">{latestLow}</span>
+                      </>
+                    );
                   })()}
                 </span>
               </div>
