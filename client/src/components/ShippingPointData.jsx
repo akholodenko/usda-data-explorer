@@ -233,53 +233,73 @@ const ShippingPointData = () => {
             <div className="price-stats">
               <h4>Price Statistics</h4>
               <div className="stat-item">
-                <span className="stat-label">Highest Price:</span>
+                <span className="stat-label">Highest / Lowest Price:</span>
                 <span className="stat-value">
                   {(() => {
                     const prices = chartData.map((d) => d.high_price);
                     const validPrices = prices
                       .map((price) => parseFloat(price))
                       .filter((price) => !isNaN(price));
-                    return validPrices.length > 0
-                      ? `$${Math.max(...validPrices).toFixed(2)}`
-                      : "N/A";
-                  })()}
-                </span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-label">Lowest Price:</span>
-                <span className="stat-value">
-                  {(() => {
-                    const prices = chartData.map((d) => d.low_price);
-                    const validPrices = prices
+                    const highest =
+                      validPrices.length > 0
+                        ? `$${Math.max(...validPrices).toFixed(2)}`
+                        : "N/A";
+
+                    const lowPrices = chartData.map((d) => d.low_price);
+                    const validLowPrices = lowPrices
                       .map((price) => parseFloat(price))
                       .filter((price) => !isNaN(price));
-                    return validPrices.length > 0
-                      ? `$${Math.min(...validPrices).toFixed(2)}`
-                      : "N/A";
+                    const lowest =
+                      validLowPrices.length > 0
+                        ? `$${Math.min(...validLowPrices).toFixed(2)}`
+                        : "N/A";
+
+                    return `${highest} / ${lowest}`;
                   })()}
                 </span>
               </div>
               <div className="stat-separator"></div>
               <div className="stat-item">
-                <span className="stat-label">Latest High:</span>
+                <span className="stat-label">Mostly High / Low Price:</span>
                 <span className="stat-value">
                   {(() => {
-                    const latest = chartData[chartData.length - 1];
-                    return latest && !isNaN(parseFloat(latest.high_price))
-                      ? `$${parseFloat(latest.high_price).toFixed(2)}`
-                      : "N/A";
+                    const prices = chartData.map((d) => d.mostly_high_price);
+                    const validPrices = prices
+                      .map((price) => parseFloat(price))
+                      .filter((price) => !isNaN(price));
+                    const highest =
+                      validPrices.length > 0
+                        ? `$${Math.max(...validPrices).toFixed(2)}`
+                        : "N/A";
+
+                    const lowPrices = chartData.map((d) => d.mostly_low_price);
+                    const validLowPrices = lowPrices
+                      .map((price) => parseFloat(price))
+                      .filter((price) => !isNaN(price));
+                    const lowest =
+                      validLowPrices.length > 0
+                        ? `$${Math.min(...validLowPrices).toFixed(2)}`
+                        : "N/A";
+
+                    return `${highest} / ${lowest}`;
                   })()}
                 </span>
               </div>
+              <div className="stat-separator"></div>
               <div className="stat-item">
-                <span className="stat-label">Latest Low:</span>
+                <span className="stat-label">Latest High / Low:</span>
                 <span className="stat-value">
                   {(() => {
                     const latest = chartData[chartData.length - 1];
-                    return latest && !isNaN(parseFloat(latest.low_price))
-                      ? `$${parseFloat(latest.low_price).toFixed(2)}`
-                      : "N/A";
+                    const latestHigh =
+                      latest && !isNaN(parseFloat(latest.high_price))
+                        ? `$${parseFloat(latest.high_price).toFixed(2)}`
+                        : "N/A";
+                    const latestLow =
+                      latest && !isNaN(parseFloat(latest.low_price))
+                        ? `$${parseFloat(latest.low_price).toFixed(2)}`
+                        : "N/A";
+                    return `${latestHigh} / ${latestLow}`;
                   })()}
                 </span>
               </div>

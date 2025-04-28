@@ -454,7 +454,7 @@
 }
 
 .price-stats {
-  width: 250px;
+  width: 400px;
   padding: 1rem;
   background: #f8f9fa;
   border-radius: 6px;
@@ -480,11 +480,15 @@
 .stat-label {
   color: #495057;
   font-weight: 500;
+  white-space: nowrap;
+  margin-right: 1rem;
 }
 
 .stat-value {
   color: #198754;
   font-weight: 600;
+  text-align: right;
+  min-width: 120px;
 }
 
 .stat-info {
