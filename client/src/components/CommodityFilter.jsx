@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 
-export default function CommodityFilter({ commodities, value, onChange }) {
+export default function CommodityFilter({
+  commodities,
+  selectedCommodity,
+  onChange,
+}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -30,6 +34,12 @@ export default function CommodityFilter({ commodities, value, onChange }) {
   const handleSelect = (commodity) => {
     onChange(commodity);
     setSearchTerm(commodity);
+    setIsOpen(false);
+  };
+
+  const handleClear = () => {
+    onChange("");
+    setSearchTerm("");
     setIsOpen(false);
   };
 
@@ -64,6 +74,11 @@ export default function CommodityFilter({ commodities, value, onChange }) {
           placeholder="Search commodities..."
           className="typeahead-input"
         />
+        {selectedCommodity && (
+          <button className="clear-button" onClick={handleClear} type="button">
+            ×
+          </button>
+        )}
         {isOpen && filteredCommodities.length > 0 && (
           <ul className="typeahead-dropdown">
             {filteredCommodities.map((c, index) => (

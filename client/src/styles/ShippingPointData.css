@@ -212,13 +212,44 @@
   width: 100%;
 }
 
-.typeahead-container,
+.typeahead-container {
+  position: relative;
+  width: 100%;
+}
+
+.typeahead-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+  padding-right: 2rem;
+}
+
+.clear-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+}
+
+.clear-button:hover {
+  color: #333;
+}
+
 .frequency-select {
   position: relative;
   width: 100%;
 }
 
-.typeahead-input,
 .frequency-select select,
 .last-days-filter select,
 .group-filter select {
@@ -226,12 +257,10 @@
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 0.9rem;
-  transition: border-color 0.2s ease;
   background-color: white;
+  font-size: 0.9rem;
 }
 
-.typeahead-input:focus,
 .frequency-select select:focus,
 .last-days-filter select:focus,
 .group-filter select:focus {
