@@ -12,7 +12,6 @@ export default function FrequencyFilter({ frequency, onFrequencyChange }) {
         >
           <option value="daily">Daily</option>
           <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
         </select>
       </div>
     </div>
