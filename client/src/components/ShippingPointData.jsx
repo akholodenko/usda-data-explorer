@@ -25,6 +25,7 @@ const ShippingPointData = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [allCommodities, setAllCommodities] = useState([]);
   const [selectedVarieties, setSelectedVarieties] = useState({});
+  const [isChartCollapsed, setIsChartCollapsed] = useState(false);
   const initialFetchDone = useRef(false);
   const commoditiesFetchDone = useRef(false);
 
@@ -190,84 +191,97 @@ const ShippingPointData = () => {
 
       {selectedRow && chartData && chartData.length > 0 && (
         <div className="chart-section">
-          <div className="chart-container">
+          <div className="chart-header">
             <h3>
               {selectedRow.commodity}{" "}
               {selectedRow.variety ? `- ${selectedRow.variety}` : ""} Price
               History
             </h3>
-            <Chart data={chartData} />
+            <button
+              className="collapse-button"
+              onClick={() => setIsChartCollapsed(!isChartCollapsed)}
+              aria-label={isChartCollapsed ? "Expand chart" : "Collapse chart"}
+            >
+              {isChartCollapsed ? "▼" : "▲"}
+            </button>
           </div>
-          <div className="price-stats">
-            <h4>Price Statistics</h4>
-            <div className="stat-item">
-              <span className="stat-label">Highest Price:</span>
-              <span className="stat-value">
-                {(() => {
-                  const prices = chartData.map((d) => d.high_price);
-                  const validPrices = prices
-                    .map((price) => parseFloat(price))
-                    .filter((price) => !isNaN(price));
-                  return validPrices.length > 0
-                    ? `$${Math.max(...validPrices).toFixed(2)}`
-                    : "N/A";
-                })()}
-              </span>
+          <div
+            className={`chart-content ${isChartCollapsed ? "collapsed" : ""}`}
+          >
+            <div className="chart-container">
+              <Chart data={chartData} />
             </div>
-            <div className="stat-item">
-              <span className="stat-label">Lowest Price:</span>
-              <span className="stat-value">
-                {(() => {
-                  const prices = chartData.map((d) => d.low_price);
-                  const validPrices = prices
-                    .map((price) => parseFloat(price))
-                    .filter((price) => !isNaN(price));
-                  return validPrices.length > 0
-                    ? `$${Math.min(...validPrices).toFixed(2)}`
-                    : "N/A";
-                })()}
-              </span>
-            </div>
-            <div className="stat-separator"></div>
-            <div className="stat-item">
-              <span className="stat-label">Latest High:</span>
-              <span className="stat-value">
-                {(() => {
-                  const latest = chartData[chartData.length - 1];
-                  return latest && !isNaN(parseFloat(latest.high_price))
-                    ? `$${parseFloat(latest.high_price).toFixed(2)}`
-                    : "N/A";
-                })()}
-              </span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">Latest Low:</span>
-              <span className="stat-value">
-                {(() => {
-                  const latest = chartData[chartData.length - 1];
-                  return latest && !isNaN(parseFloat(latest.low_price))
-                    ? `$${parseFloat(latest.low_price).toFixed(2)}`
-                    : "N/A";
-                })()}
-              </span>
-            </div>
-            <div className="stat-info">
-              <small>Sizing: {selectedRow.item_size}</small>
-              {selectedRow.variety && (
-                <small>Variety: {selectedRow.variety}</small>
-              )}
-              <small>
-                Organic: {selectedRow.organic === "Y" ? "Yes" : "No"}
-              </small>
-              {selectedRow.package && (
-                <small>Package: {selectedRow.package}</small>
-              )}
-              {selectedRow.quality && (
-                <small>Quality: {selectedRow.quality}</small>
-              )}
-              {selectedRow.condition && (
-                <small>Condition: {selectedRow.condition}</small>
-              )}
+            <div className="price-stats">
+              <h4>Price Statistics</h4>
+              <div className="stat-item">
+                <span className="stat-label">Highest Price:</span>
+                <span className="stat-value">
+                  {(() => {
+                    const prices = chartData.map((d) => d.high_price);
+                    const validPrices = prices
+                      .map((price) => parseFloat(price))
+                      .filter((price) => !isNaN(price));
+                    return validPrices.length > 0
+                      ? `$${Math.max(...validPrices).toFixed(2)}`
+                      : "N/A";
+                  })()}
+                </span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Lowest Price:</span>
+                <span className="stat-value">
+                  {(() => {
+                    const prices = chartData.map((d) => d.low_price);
+                    const validPrices = prices
+                      .map((price) => parseFloat(price))
+                      .filter((price) => !isNaN(price));
+                    return validPrices.length > 0
+                      ? `$${Math.min(...validPrices).toFixed(2)}`
+                      : "N/A";
+                  })()}
+                </span>
+              </div>
+              <div className="stat-separator"></div>
+              <div className="stat-item">
+                <span className="stat-label">Latest High:</span>
+                <span className="stat-value">
+                  {(() => {
+                    const latest = chartData[chartData.length - 1];
+                    return latest && !isNaN(parseFloat(latest.high_price))
+                      ? `$${parseFloat(latest.high_price).toFixed(2)}`
+                      : "N/A";
+                  })()}
+                </span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Latest Low:</span>
+                <span className="stat-value">
+                  {(() => {
+                    const latest = chartData[chartData.length - 1];
+                    return latest && !isNaN(parseFloat(latest.low_price))
+                      ? `$${parseFloat(latest.low_price).toFixed(2)}`
+                      : "N/A";
+                  })()}
+                </span>
+              </div>
+              <div className="stat-info">
+                <small>Sizing: {selectedRow.item_size}</small>
+                {selectedRow.variety && (
+                  <small>Variety: {selectedRow.variety}</small>
+                )}
+                <small>
+                  Organic: {selectedRow.organic === "Y" ? "Yes" : "No"}
+                </small>
+                {selectedRow.package && (
+                  <small>Package: {selectedRow.package}</small>
+                )}
+                {selectedRow.quality && (
+                  <small>Quality: {selectedRow.quality}</small>
+                )}
+                {selectedRow.condition && (
+                  <small>Condition: {selectedRow.condition}</small>
+                )}
+              </div>
             </div>
           </div>
         </div>
