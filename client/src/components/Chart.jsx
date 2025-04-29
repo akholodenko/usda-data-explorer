@@ -79,7 +79,7 @@ export default function Chart({ data }) {
         labels,
         datasets: [
           {
-            label: "High Price (smoothed)",
+            label: "High Price",
             data: highAvg,
             borderColor: "#4f46e5", // Modern indigo
             backgroundColor: "rgba(79, 70, 229, 0.1)",
@@ -90,7 +90,7 @@ export default function Chart({ data }) {
             spanGaps: true,
           },
           {
-            label: "Low Price (smoothed)",
+            label: "Low Price",
             data: lowAvg,
             borderColor: "#10b981", // Modern emerald
             backgroundColor: "rgba(16, 185, 129, 0.1)",
